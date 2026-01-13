@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src = "/js/bootstrap.bundle.min.js"></script>
+    <!--icons使用本地包不行，使用CDN可以，会额外请求字体文件，回头研究一下！
+        答案：idea内置的built-in server（静态文件预览器）不提供 xx.woff格式的文件请求，因此会失败。启动正常的webserver等则无此问题，
+        为了使用idea内置浏览器调试，先引用cdn模式
+    -->
+<!--    <link rel="stylesheet" href="/font/bootstrap-icons.css">-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    <style>
+        /**
+        如果在nav中使用 .fixed-top属性，这个nav将脱离文档流，后果就是会覆盖后续元素，解决办法就是：
+        1） 把后续元素（<body>)整体后移，如这段css的定义
+        2） 或者是，把fixed-top，替换为sticky-top
+         */
+        body{
+            /*padding-top: 4.5rem;*/
+        }
+    </style>
+    <title>Test</title>
+
+</head>
+<body>
+
+<div class="bg-info">
+    <h1>hello</h1>
+</div>
+
+<div class="border border-0">
+    <div class="border border-1">
+        <div class="border border-0">
+hello
+        </div>
+    </div>
+</div>
+
+<div class="text-danger bg-info border border-3 mt-4 py-3">
+<table class="bg-primary border border-1 my-3">
+    <thead class="mt-4">
+    <tr class="">
+        <th>A</th>
+        <th>B</th>
+    </tr>
+    </thead>
+    <tbody class="mt-3 ms-2">
+    <tr>
+        <td>a</td>
+        <td>b</td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+<div class="d-flex border">
+    <div>Left</div>
+    <div class="mx-auto">Center</div>
+    <div class="mx-auto">Right</div>
+</div>
+
+<div class="d-flex border">
+    <div class="ms-auto">Right</div>
+</div>
+
+<h5 class="mt-4"> Test form-floating</h5>
+<div class="form-floating">
+    <input id="input-id1" class="form-control" placeholder="">
+    <label for="input-id1" class="form-label">INPUTS:</label>
+</div>
+</body>
+</html>

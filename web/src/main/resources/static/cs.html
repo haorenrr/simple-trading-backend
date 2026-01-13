@@ -1,0 +1,187 @@
+<html lang="zh" xmlns="http://www.w3.org/1999/html" xmlns:background="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/vue.global.js"></script>
+    <script src="/js/axios.min.js"></script>
+    <script src = "/js/bootstrap.bundle.min.js"></script>
+    <Title>Simulator</Title>
+</head>
+<body>
+<div id="app">
+    <div class="container-fluid min-vh-100" >
+        <div class="row h-100">
+            <div class="col-2 d-flex flex-column justify-content-start border-end">
+                <button class="btn btn-primary mt-5" type="button" @click="initAcount">充值</button>
+                <button class="btn btn-info mt-2" type="button" @click="startSim($event)">开始交易</button>
+                <button class="btn btn-danger mt-2" type="button" @click="stopSim">停止</button>
+                <div class="flex-grow-1"></div>
+            </div>
+            <div class="col-7" style="height: 70vh; overflow: auto">
+                <table class="table table-borderless table-striped">
+                    <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Message</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="item in reqLogList" :key="item.id">
+                        <td>{{ item.time }} </td>
+                        <td>{{ item.msg }} </td>
+                        <td>submit {{ item.status }} </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-3">
+                <div class="card mt-5">
+                    <div class="card-header">
+                        充值记录
+                    </div>
+                    <div class="card-body">
+                        <table>
+                            <thead class="visually-hidden"><tr><th>xxx</th></tr></thead>
+                            <tbody class="">
+                            <tr v-for = "item in rechargeLog">
+                                <td>{{ item }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const { createApp, ref, shallowRef, onMounted, onUnmounted } = Vue;
+    const  appData = {
+        setup(){
+            const BASE_URL = 'http://localhost:8080/';
+            const HTTP_CONFIG = {
+                params:{},
+                headers:{
+                    // "Authorization":"Basic 1:pw",
+                    'accept': 'application/json'
+                },
+                baseURL:BASE_URL
+            }
+
+            const reqLogList = ref([])
+            const rechargeLog = ref([])
+            let simStopped = false
+            let logId = 100; //自增ID
+
+            const reCharge = ""
+            const buy = "/api/trade/buy"
+            const sell = "/api/trade/sell"
+
+            const userIdList = [10, 10, 10, 20, 30, 40, 50]
+            const urlList = [buy, sell]
+            const amountList = [1,2,3,4,5,6,7,8,9]
+            const priceList = [5, 10, 15, 20, 30]
+            const assetTypeList=['APPL', 'USD']
+
+            async function initAcount(){
+                //Recharge for acounts
+                for(const asset of assetTypeList) {
+                    for (const item of userIdList) {
+                        console.log('recharge ', asset, ' for ', item)
+                        const userIdPw = item + ":pw"
+                        // /api/asset/recharge?type=USD&amount=200
+                        await axios.get('/api/asset/recharge', {
+                            ...HTTP_CONFIG,
+                            headers: {
+                                ...HTTP_CONFIG['headers'],
+                                'Authorization': "Basic " + userIdPw,
+                            },
+                            params: {
+                                type: asset,
+                                amount: '1000'
+                            }
+                        })
+                        .then((response) => {
+                            let msg = 'rechare for user ' + item + ' success'
+                            console.log(msg)
+                            rechargeLog.value.push(msg)
+                        })
+                        .catch((error) => {
+                            let msg = 'rechare for user ' + item + ' Fail!'
+                            console.log(msg)
+                            rechargeLog.value.push(msg)
+                        })
+
+                    }
+                }
+                rechargeLog.value.push("recharge over.")
+            }
+            async function simTrade(){
+               const userId = userIdList[Math.floor(Math.random()*userIdList.length)]
+                const url = urlList[Math.floor(Math.random()*urlList.length)]
+                const amount = amountList[Math.floor(Math.random()*amountList.length)]
+                const price = priceList[Math.floor(Math.random()*priceList.length)]
+
+                /**
+                 * http://localhost:8080/api/trade/buy?price=10&amount=3'
+                 * http://localhost:8080/api/trade/sell?price=10&amount=2'
+                 */
+                let userIdPw = userId + ":pw"
+                let msg = "user " + userId + " " + url.slice(11) + " " + amount + " in price " + price
+                let reqLog = {
+                    id: logId++,
+                    time: new Date().toLocaleTimeString(),
+                    msg: msg,
+                    status: ""
+                }
+                await axios.get(url, {
+                    ...HTTP_CONFIG,
+                    headers: {
+                        ...HTTP_CONFIG['headers'],
+                        'Authorization': "Basic " + userIdPw
+                    },
+                    params: {price: price, amount: amount}
+                })
+                .then((response) => {
+                    reqLog['status'] = 'success'
+                    console.log(reqLog)
+                    reqLogList.value.unshift(reqLog)
+                })
+                .catch((error) => {
+                    reqLog['status'] = 'fail'
+                    console.log(reqLog)
+                    reqLogList.value.unshift(reqLog)
+                })
+                if(reqLogList.value.length > 15) reqLogList.value.pop() // keep to display 25 elements
+            }
+            const startSim = async (event)=>{
+                if(event?.type === 'click')simStopped = false //手动点击按钮
+                if(simStopped) return;
+                await simTrade()
+                setTimeout(startSim, 1500)
+            }
+            const stopSim = () => {
+                simStopped = true
+            }
+
+            onMounted(()=>{
+                console.log('onMounted!')
+            })
+
+            return {
+                rechargeLog,
+                reqLogList,
+                initAcount,
+                stopSim,
+                startSim,
+            }
+        }
+    }
+
+    const app = Vue.createApp(appData).mount('#app')
+</script>
+</body>
+</html>

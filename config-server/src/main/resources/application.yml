@@ -1,0 +1,15 @@
+server:
+  port: 8888
+# 服务的端口号8888
+
+spring:
+  application:
+    name: config-server
+  profiles: # ?????????Config Server???profile?????native:
+      active: native
+  cloud:
+    config:
+          server:
+            native:
+              # 本地文件
+              search-locations: file:/D:/idea_prj/stock-exchanger2/config-server/config-repo

@@ -1,0 +1,35 @@
+
+HELP.md
+
+target/
+
+*mvn*
+*.mvn/
+.gitignore
+!/.gitignore
+
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/
+
+### Logback ###
+*.log
+*.log.*
+logs/

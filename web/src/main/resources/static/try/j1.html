@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+
+<span id="t"></span>
+<span id="o"></span>
+<button type="button" id="b1" name="BUTTON" value="BUTTON1" onclick="clickme(this)"></button>
+<script>
+    document.getElementById("t").innerHTML=window.toString()
+    console.log("where am I? look test console()")
+    function clickme(obj){
+        //alert("clicked! ");
+        console.log("button clicked! see elements:")
+        console.log(obj.id, obj.name, obj.value)
+        console.log("end of elemts")
+
+
+    }
+    {
+        var vardata = 5;
+        let letdata = 6
+        const cdata = 7
+        document.getElementById("t").innerHTML += "\n inner vardata = " + vardata + "\tinner letdata=" + letdata;
+    }
+    document.getElementById("t").innerHTML += "<br> outter vardata = " + vardata
+    // document.getElementById("t").innerHTML += "<br>outter letdata=" + letdata;
+
+    let arrydata ={
+        firstName:"John",
+        lastName:"Doe",
+        age:50,
+        eyeColor:"blue",
+        getName: function (){return this.firstName + "." + this.lastName}
+    };
+    document.getElementById("o").innerHTML = arrydata["age"]
+    document.getElementById("o").innerHTML = arrydata.firstName
+    document.getElementById("o").innerHTML = arrydata.getName()
+
+
+</script>
+
+</body>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+</html>

@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: openapi
+  config:
+    import: common-logging.yml  #从common模块引入公共配置
+
+# 这些跨模块的公共配置移动到common模块里了，这里的配置会覆盖common里的全局配置！
+##logging:
+#  level:
+#    root: info                    # 全局保持 INFO，避免系统日志泛滥
+#    org.example.mylearn: debug  # 针对你的业务逻辑包开启 DEBUG

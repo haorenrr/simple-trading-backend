@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <script src="/js/vue.global.js"> </script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Test VUE.JS</title>
+</head>
+<body>
+<div id="hello-vue" class="">
+    <span class="text-primary fw-bold">print "$message": </span> {{ message }}
+    <h6 class="text-primary fw-bold mt-4">Test Event:</h6>
+    <button type="button" id="btn1" class="btn btn-danger" @click="greet('', $event)">Click Me</button>
+
+    <h6 class="text-primary fw-bold mt-4">Test Component:</h6>
+    <my-comp name="zhang san"></my-comp>
+
+    <h6 class="text-primary fw-bold mt-4">Test Event Chains:</h6>
+    <my-click @myclick="myClick"></my-click>
+
+    <h6 class="text-info fw-bold mt-4">Test Data-Bind:</h6>
+    <a class="text-success" v-bind:href="url">i am link</a>
+    <p class="text-success" v-if="isHere">show me! isHere==true</p>
+    <p class="text-success" v-else>show me! isHere==false</p>
+
+    <h6 class="text-info fw-bold mt-4">Test for loop:</h6>
+    <div>
+        <ul>
+            <li v-for="item in items" :key="item.id">{{ item.id }}, {{ item.name }}</li>
+        </ul>
+    </div>
+
+    <h6 class="text-info fw-bold mt-4">Test v-model:</h6>
+    <div>
+        <p class="text-warning">
+            you input: <span class="text-primary fw-bold">{{ typedMsg }}</span>,
+            Its 80% is<span class="text-primary fw-bold"> {{ taxedMsg }}</span>
+        </p>
+        <input v-model="typedMsg" type="number"/>
+    </div>
+
+    <h6 class="text-info fw-bold mt-4">Test v-show:</h6>
+    <div class="d-flex">
+        <button class="btn btn-success" @click="lightOn = !lightOn">开关</button>
+        <p class="border bg-danger my-auto" v-show="lightOn">light on!</p>
+    </div>
+
+    <h6 class="text-info fw-bold mt-4">Test v-html vs {{ }}:</h6>
+    <div>
+        <p class="text-primary">see text mode: {{ rawHtml }}</p>
+        <p class="text-primary">see v-html mode: <span v-html="rawHtml"></span></p>
+    </div>
+
+    <h6 class="text-info fw-bold mt-4">Test form v-model:</h6>
+    <div>
+        <input id="google" type="radio"  value="Google" v-model="picked">
+        <label for="google">GOOGLE</label>
+
+        <input class="ms-3" id="baidu" type="radio" value="Baidu" v-model="picked">
+        <label for="baidu">BAIDU</label>
+        <p class="text-primary">picked={{ picked }}</p>
+    </div>
+    <div class="">
+        <label for="tyeSelect" class="form-label">Select some one:</label>
+        <select id="tyeSelect" class="form-control" v-model="selected1" name="trySelect" multiple>
+            <option value="google.com" selected>Google</option>
+            <option value="baidu.com">Baidu</option>
+            <option value="ali.com">Ali</option>
+        </select>
+    <p class="text-primary">select1={{ selected1 }}</p>
+    </div>
+    <div>
+        <label class="form-label" for="input1">Input some NUMBER:</label>
+        <input class="form-control" id="input1" v-model.number="input1">
+        <p class="text-primary">input1 = {{ input1 }}</p>
+    </div>
+
+    <h6 class="text-info fw-bold mt-4">Test ajax/axios:</h6>
+    <div>
+        <p class="fw-bold">HTTP Content:</p>
+        <p class="border bg-light">{{ httpInfo }}</p>
+    </div>
+
+    <footer class="d-flex flex-grow-1" style="height: 30vh"></footer>
+</div>
+
+<script>
+    const myComp = {
+        template: `<p class="text-info">{{ name }} is from template and here!</p>`,
+        props: ['name']
+    }
+    const appData = {
+        data() {
+            return {
+                message: "Hello Vue.js!",
+                url:"https://www.google.com",
+                isHere: false,
+                items: [
+                    {id:1, age:14, name:'Jim'},
+                    {id:2, age:28, name:'Tom'},
+                    {id:3, age:34, name:'Lilei'},
+                ],
+                typedMsg: 1,
+                lightOn: true,
+                rawHtml:'<span style=\"color: red\">这里会显示红色！</span>',
+                picked: 'Baidu',
+                selected1: ['Baidu'],
+                input1: '1',
+                httpInfo: 'beginning',
+            }
+        },
+        methods: {
+            greet(id, e) {
+                alert(e.target.id + " clicked!");
+            },
+            myClick(arg) {
+                this.message = "myclick occured! " + arg;
+            }
+        },
+        computed:{
+            /*taxedMsg() {
+                return this.typedMsg * 0.8
+            },*/
+            taxedMsg:{
+                get:function(){
+                    return this.typedMsg * 0.7;
+                },
+            }
+
+        },
+        components:{
+            'my-comp' : myComp
+        },
+        mounted(){
+            console.log("Component is mounted!")
+            axios
+                .get('https://api.zippopotam.us/us/90210')
+                .then(res => {
+                    this.httpInfo = res.data;
+                    //console.log(res.headers.toJSON());
+                })
+            .catch(err => {
+                console.log("find an error");
+                console.log(err)
+            })
+        },
+        beforeCreate(){
+            console.log("beforeCreate");
+        },
+        created(){
+            console.log("created");
+        },
+        beforeMount(){
+            console.log("beforMount");
+        },
+
+        beforeUnmount(){
+            console.log("beforeUnmount");
+        },
+
+        unmounted(){
+          console.log("unmounted");
+        }
+
+    }
+
+    const app = Vue.createApp(appData)
+    app.component('my-click', {
+        data(){
+            return {count : 1}
+        },
+        template: ` <button id="btn2" @click="incCount"> count={{ count }}</button> `,
+        methods: {
+            incCount() {
+                this.count++;
+
+                this.$emit('myclick', 'btn2')
+            }
+        }
+    })
+    app.mount('#hello-vue');
+    app.unmount();
+    app.mount('#hello-vue');
+
+</script>
+
+</body>
+</html>
