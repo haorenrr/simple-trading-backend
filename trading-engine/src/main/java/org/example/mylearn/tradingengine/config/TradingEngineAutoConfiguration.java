@@ -16,7 +16,8 @@ import org.springframework.context.annotation.Import;
         MatcherServiceImpl.class,
         ClearingServiceImpl.class,
         RpcClientConfiguration.class,
-        SequenceService.class
+        SequenceService.class,
+        AppBizInit.class
 })
 public class TradingEngineAutoConfiguration {
     /**

@@ -31,9 +31,7 @@ public class AssetService {
 
     @PostConstruct
     void init() {
-        //初始化资产数据库
-        initAssetDB();
-        logger.info("{} init over.", this.getClass().getName());
+
     }
 
     public Result<AssetEntity> getAssetByUidAndType(String uid, AssetType type){
@@ -201,7 +199,7 @@ public class AssetService {
     }
 
 
-    private void initAssetDB(){
+    public void initAssetDB(){
         String[] jsonArray = {
                 "{\"uid\":\"0\",\"assetType\":\"USD\", \"available\":0, \"frozen\":0}",
                 "{\"uid\":\"0\",\"assetType\":\"APPL\", \"available\":0, \"frozen\":0}",
