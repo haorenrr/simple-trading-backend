@@ -34,8 +34,11 @@ public class TradingServiceImpl implements TradingService {
     @Override
     public Result<OrderEntity> buy(String uid, BigDecimal price, BigDecimal amont) {
 
-        Integer seqId = sequenceService.newSequence();
-        Result<OrderEntity> result = orderService.createNewOrder(seqId, uid, TradeType.BUY, price, amont);
+        var seqRlt = sequenceService.newSequence();
+        if(!seqRlt.isSuccess())
+            return Result.fail(null, seqRlt.getErrorCode(), seqRlt.getMessage());
+
+        var result = orderService.createNewOrder(seqRlt.getData(), uid, TradeType.BUY, price, amont);
         if(!result.isSuccess()) {
             return result;
         }
@@ -44,8 +47,11 @@ public class TradingServiceImpl implements TradingService {
 
     @Override
     public Result<OrderEntity> sell(String uid, BigDecimal price, BigDecimal amont) {
-        Integer seqId = sequenceService.newSequence();
-        var result = orderService.createNewOrder(seqId, uid, TradeType.SELL, price, amont);
+        var seqRlt = sequenceService.newSequence();
+        if (!seqRlt.isSuccess())
+            return Result.fail(null, seqRlt.getErrorCode(),seqRlt.getMessage());
+
+        var result = orderService.createNewOrder(seqRlt.getData(), uid, TradeType.SELL, price, amont);
         if(!result.isSuccess()) {
             return result;
         }

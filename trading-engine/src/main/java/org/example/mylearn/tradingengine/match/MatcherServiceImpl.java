@@ -115,8 +115,14 @@ public class MatcherServiceImpl implements MatcherService {
             if(item.getUpdatedAt().before(start) || pickedTicks >= numTicks){
                 return Result.ok(ticks);
             }
+            var seqRlt = sequenceService.newSequence();
+            if(!seqRlt.isSuccess()){
+                var msg = "generate Id fail! msg: %s".formatted(seqRlt.getMessage());
+                logger.warn(msg);
+                return Result.fail(null, seqRlt.getErrorCode(), seqRlt.getMessage());
+            }
             var tick = new RealTimeTick();
-            tick.setId(sequenceService.newSequence());
+            tick.setId(seqRlt.getData());
             tick.setTime(item.getUpdatedAt());
             tick.setPrice(item.getPrice());
             tick.setAmount(item.getAmount());
@@ -280,7 +286,12 @@ public class MatcherServiceImpl implements MatcherService {
         finishedOrders.forEach((orderTo) -> {
             var detail = new TradingDetail();
 
-            detail.setId(sequenceService.newSequence());
+            var seqRlt = sequenceService.newSequence();
+            if(!seqRlt.isSuccess()){
+                var msg = "get sequence id fail! msg: %s".formatted(seqRlt.getMessage());
+                logger.warn(msg);
+            }
+            detail.setId(seqRlt.getData());
             detail.setFromOrderId(order.getId());
             detail.setToOrderId(orderTo.getId());
 

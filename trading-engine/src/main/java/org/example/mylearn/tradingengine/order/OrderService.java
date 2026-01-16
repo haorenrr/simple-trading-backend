@@ -63,7 +63,13 @@ public class OrderService {
         }
         // 实例化Order:
         OrderEntity order = new OrderEntity();
-        order.setId(sequenceService.newSequence());
+        var seqRlt = sequenceService.newSequence();
+        if(!seqRlt.isSuccess()){
+            var msg = "get sequence id fail! msg= %s".formatted(seqRlt.getMessage());
+            logger.warn(msg);
+            return Result.fail(null, seqRlt.getErrorCode(),seqRlt.getMessage());
+        }
+        order.setId(seqRlt.getData());
         order.setSeqId(sequenceId);
         order.setUid(userId);
         order.setTradeType(type);

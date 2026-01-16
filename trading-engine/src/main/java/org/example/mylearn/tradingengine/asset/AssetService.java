@@ -19,8 +19,6 @@ import java.util.concurrent.ConcurrentMap;
 
 @Service
 public class AssetService {
-    //@Autowired
-    //private SequenceService sequenceService;
     @Autowired
     private SequenceService sequenceService;
 
@@ -79,7 +77,11 @@ public class AssetService {
 
         // 模拟数据库的自增ID列
         if(assetEntity.getId() == 0) {
-            assetEntity.setId(sequenceService.newSequence());
+            Result<Integer> result = sequenceService.newSequence();
+            if(!result.isSuccess()) {
+                return Result.fail(assetEntity, result.getErrorCode(), result.getMessage());
+            }
+            assetEntity.setId(result.getData());
         }
 
         if(userAssertsDB.get(uid) == null){
@@ -121,14 +123,26 @@ public class AssetService {
         AssetEntity fromAsset = fromAssetResult.getData();
         if(!fromAssetResult.isSuccess()){
             // 用户资产不存在，初始化一个
-            fromAsset = addNewAsset(fromUserId, assetType).getData();
+            Result<AssetEntity> rlt = addNewAsset(fromUserId, assetType);
+            if(!rlt.isSuccess()){
+                var msg = "Adding new Asset for %s failed. detial msg: %s".formatted(fromUserId, rlt.getMessage());
+                logger.warn(msg);
+                return Result.fail(null, ErrorCode.INVALID_PARAM, msg);
+            }
+            fromAsset = rlt.getData();
         }
 
         var toAssetResult = getAssetByUidAndType(toUserId, assetType);
         AssetEntity toAsset = toAssetResult.getData();
         if(!toAssetResult.isSuccess()){
             // 用户资产不存在，初始化一个
-            toAsset = addNewAsset(toUserId, assetType).getData();
+            Result<AssetEntity> rlt = addNewAsset(toUserId, assetType);
+            if(!rlt.isSuccess()){
+                var msg = "Adding new Asset for %s failed. detial msg: %s".formatted(fromUserId, rlt.getMessage());
+                logger.warn(msg);
+                return Result.fail(null, ErrorCode.INVALID_PARAM, msg);
+            }
+            toAsset = rlt.getData();
         }
 
         switch(type){
@@ -203,7 +217,11 @@ public class AssetService {
                 .map(json -> gson.fromJson(json, AssetEntity.class))
                 .toList();
         list1.forEach(e->{
-            addNewAsset(e);
+            var r = addNewAsset(e);
+            if(!r.isSuccess()) {
+                logger.info("Failed to add new asset, reason: {}", r.getMessage());
+                return;
+            }
             logger.info("Add assetEntity: {}", gson.toJson(e));
         });
     }
