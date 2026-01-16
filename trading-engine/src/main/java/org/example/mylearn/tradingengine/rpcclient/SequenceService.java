@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SequenceService {
-    private SequenceFeignClient  sequenceFeignClient;
+    private final SequenceFeignClient  sequenceFeignClient;
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     // instead of @Autowired, inject by construction

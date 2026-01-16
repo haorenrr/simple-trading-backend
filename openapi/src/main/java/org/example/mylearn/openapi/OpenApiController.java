@@ -59,8 +59,7 @@ public class OpenApiController {
             logger.warn(msg);
             return Result.fail(null, ErrorCode.UNAUTHORIZED, msg);
         }
-        Result<OrderEntity> result = tradingService.buy(uid, new BigDecimal(price), new BigDecimal(amount));
-        return result;
+        return tradingService.buy(uid, new BigDecimal(price), new BigDecimal(amount));
     }
 
     @GetMapping("/trade/sell")
@@ -71,8 +70,7 @@ public class OpenApiController {
             logger.warn(msg);
             return Result.fail(null, ErrorCode.UNAUTHORIZED, msg);
         }
-        var rlt = tradingService.sell(uid, new BigDecimal(price), new BigDecimal(amount));
-        return rlt;
+        return tradingService.sell(uid, new BigDecimal(price), new BigDecimal(amount));
     }
 
     @GetMapping("/trade/cancel")
@@ -85,8 +83,7 @@ public class OpenApiController {
             logger.warn(msg);
             return Result.fail(null, ErrorCode.UNAUTHORIZED, msg);
         }
-        var rlt = tradingService.cancel(uid, orderId);
-        return rlt;
+        return tradingService.cancel(uid, orderId);
     }
 
     @GetMapping("/trade/finishedDetails")
