@@ -1,6 +1,12 @@
 spring:
   application:
     name: sequence-engine
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8080  #optinal for working without sentinel dashboard
+        port: 8719
+      eager: true
 
 Logging:
   level:
@@ -23,3 +29,4 @@ eureka:
       defaultZone: http://localhost:9100/eureka
   instance:
     prefer-ip-address: true
+

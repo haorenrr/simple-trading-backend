@@ -45,6 +45,9 @@ public enum ErrorCode {
     ASSET_ALREADY_EXISTS(3203, "asset already exists"),
     ASSET_NOT_ENOUGH(3204, "asset is not enough"),
 
+    // ====== System control ===========
+    FLOW_CONTROL(4001, "blocked by flow contrl"),
+
     // ====== 未知 ======
     UNKNOWN_ERROR(9999, "unknown error");
 
