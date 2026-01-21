@@ -4,7 +4,7 @@ spring:
   cloud:
     sentinel:
       transport:
-        dashboard: localhost:8080  #optinal for working without sentinel dashboard
+        dashboard: localhost:9000  #optinal for working without sentinel dashboard
         port: 8719
       eager: true
 
@@ -21,12 +21,12 @@ springdoc:
     operations-sorter: alpha
 
 server:
-  port: 8081
+  port: 8094
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:9100/eureka
+      defaultZone: http://localhost:8091/eureka
   instance:
     prefer-ip-address: true
 

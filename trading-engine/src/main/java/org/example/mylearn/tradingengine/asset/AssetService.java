@@ -207,7 +207,7 @@ public class AssetService {
                 "{\"uid\":\"1\",\"assetType\":\"APPL\", \"available\":10, \"frozen\":0}",
                 "{\"uid\":\"2\",\"assetType\":\"APPL\", \"available\":20, \"frozen\":0}",
                 "{\"uid\":\"3\",\"assetType\":\"USD\", \"available\":200, \"frozen\":0}",
-                "{\"uid\":\"4\",\"assetType\":\"USD\", \"available\":300, \"frozen\":0}"
+                "{\"uid\":\"10\",\"assetType\":\"APPL\", \"available\":100, \"frozen\":0}"
         };
 
         Gson gson = new Gson();

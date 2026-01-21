@@ -9,7 +9,7 @@ logging:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:9100/eureka
+      defaultZone: http://localhost:8091/eureka
     enabled: true
     register-with-eureka: false #consumer, not provider
     fetch-registry: true

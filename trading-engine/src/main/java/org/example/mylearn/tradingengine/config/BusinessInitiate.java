@@ -28,7 +28,7 @@ public class BusinessInitiate {
 
     // Listen Registery's Hearbeat, and see if the requered service is available
     @EventListener
-    public void onHeartbeat() {
+    public void onHeartbeat(HeartbeatEvent event) {
         if(initialized.get()) return;
 
         var instances = discoveryClient.getInstances(SequenceApi.SERVER_NAME);

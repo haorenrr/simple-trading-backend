@@ -6,8 +6,8 @@ PID_FILE="logs/pids.txt"
 
 SERVICES=(
   "java -jar ./registry-server/target/registry-server-1.0.0-SNAPSHOT.jar"
+  "java -jar ./openapi/target/openapi-1.0.0-SNAPSHOT-exec.jar --spring.profiles.active=servic"
   "java -jar ./sequence-engine/target/sequence-engine-1.0.0-SNAPSHOT-exec.jar"
-  "java -jar ./web/target/web-1.0.0-SNAPSHOT.jar"
 )
 
 echo "Starting services..."
@@ -17,7 +17,7 @@ for CMD in "${SERVICES[@]}"; do
   PID=$!
   echo "$PID" >> "$PID_FILE"
   echo "[$CMD] started, pid=$PID"
-  sleep 15
+  #sleep 15
 done
 
 echo "All services started."

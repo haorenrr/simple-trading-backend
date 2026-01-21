@@ -2,18 +2,17 @@
 HELP.md
 
 target/
-tools/
 
 *mvn*
 *.mvn/
 .gitignore
 !/.gitignore
+
 .gitattributes
 !/.gitattributes
 
 !**/src/main/**/target/
 !**/src/test/**/target/
-
 
 ### STS ###
 .apt_generated
@@ -25,15 +24,15 @@ tools/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+*.idea
 *.iws
 *.iml
 *.ipr
 
 ### VS Code ###
-.vscode/
+*.vscode/
 
 ### Logback ###
 *.log
 *.log.*
-logs/
+*logs/

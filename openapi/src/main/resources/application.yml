@@ -9,3 +9,21 @@ spring:
 #  level:
 #    root: info                    # 全局保持 INFO，避免系统日志泛滥
 #    org.example.mylearn: debug  # 针对你的业务逻辑包开启 DEBUG
+server:
+  port: 8090
+
+---
+spring:
+  config:
+    activate:
+      on-profile: service
+  cloud:
+    discovery:
+      enabled: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8091/eureka
+    enabled: true
+    register-with-eureka: false #consumer, not provider
+    fetch-registry: true
